@@ -12,13 +12,13 @@ def main():
 
     '''
     Inst_Formats = {
-            'ADD': { 'type': 'R', 'code': '10001011000'}
-            'SUB': { 'type': 'R', 'code': '11001011000'}
-            'AND': { 'type': 'R', 'code': '10001010000'}
-            'ORR': { 'type': 'R', 'code': '10101010000'}
-            'LDUR': { 'type': 'D', 'code': '11111000010'}
-            'STUR': { 'type': 'D', 'code': '11111000000'}
-            'ADDI': { 'type': 'I', 'code': '1001000100'}
+            'ADD': { 'type': 'R', 'code': '10001011000'},
+            'SUB': { 'type': 'R', 'code': '11001011000'},
+            'AND': { 'type': 'R', 'code': '10001010000'},
+            'ORR': { 'type': 'R', 'code': '10101010000'},
+            'LDUR': { 'type': 'D', 'code': '11111000010'},
+            'STUR': { 'type': 'D', 'code': '11111000000'},
+            'ADDI': { 'type': 'I', 'code': '1001000100'},
             'SUBI': { 'type': 'I', 'code': '1101000100'}
     }
 
