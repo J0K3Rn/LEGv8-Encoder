@@ -8,7 +8,7 @@ def main():
         Formats supported: R, I, D
         R: Opcode(11b), Rm(5b), shamt(6b), Rn(5b), Rd(5b)
         I: Opcode(10b), Immediate(12b), Rn(5b), Rd(5b)
-        D: Opcode(11b), Address(9b), Op2(2b)m Rn(5b), Rt(5b)
+        D: Opcode(11b), Address(9b), Op2(2b), Rn(5b), Rt(5b)
 
     '''
     Inst_Formats = {
@@ -31,27 +31,42 @@ def main():
 
     lines = inf.readlines()
 
+    binaryCode = ''
     count = 0
     for line in lines:
         count += 1
         tmp = line.replace(',', '') #Remove all comma's to make splitting easier
-        # Check if there are []'s
-        tmp = line.split(' ') # Separate commands by space
-        #Should probably remove the X's too
-
+        tmp = tmp.replace('[', '') #Remove ['s
+        tmp = tmp.replace(']', '') #Remove ]'s
+        tmp = tmp.replace('X', '') #Remove all X's
+        tmp = tmp.replace('#', '') #Remove all #'s
+        tmp = tmp.split(' ') # Separate commands by space
+        
+        # Currently some bugs in the evaluations
         #Check for instruction type format. Go into branches
-        if Inst_Formats[tmp[0]]['type'] == 'R':
-            ...
-        elif Inst_Formats[tmp[0]]['type'] == 'D':
-            ...
-        elif Inst_Formats[tmp[0]]['type'] == 'I':
-            ...
+        if Inst_Formats[tmp[0]]['type'] == 'R': # R format
+            binaryCode += Inst_Formats[tmp[0]]['code'] # opcode
+            binaryCode += bin(int(tmp[3]))[2:].zfill(5) # Rm
+            binaryCode += '000000' # shamt (6 0 bits for this project)
+            binaryCode += bin(int(tmp[2]))[2:0].zfill(5) # Rn
+            binaryCode += bin(int(tmp[1]))[2:0].zfill(5) # Rd
+        elif Inst_Formats[tmp[0]]['type'] == 'D': # D format
+            binaryCode += Inst_Formats[tmp[0]]['code'] # opcode
+            binaryCode += bin(int(tmp[3]))[2:].zfill(9) # address
+            binaryCode += '00' # op2 (They're both just 00 for LDUR and STUR)
+            binaryCode += bin(int(tmp[2]))[2:].zfill(5) # Rn
+            binaryCode += bin(int(tmp[1]))[2:].zfill(5) # Rt
+        elif Inst_Formats[tmp[0]]['type'] == 'I': # I format
+            binaryCode += Inst_Formats[tmp[0]]['code'] # opcode
+            binaryCode += bin(int(tmp[3]))[2:0].zfill(12) # immediate
+            binaryCode += bin(int(tmp[2]))[2:0].zfill(5) # Rn
+            binaryCode += bin(int(tmp[1]))[2:0].zfill(5) # Rd
         else:
             print('Instruction: ' + tmp[0] + ' not found.. exiting')
-            exit 1
+            return 1
 
         hexcode = hex(int(binaryCode, 2))
-        outf.write(line + " " + binaryCode +  " " + hexcode)
+        outf.write(line.rstrip() + " " + binaryCode +  " " + hexcode + "\n")
 
 if __name__ == "__main__":
     main()
